@@ -9,12 +9,12 @@ from bs4 import BeautifulSoup
 # url = "https://www.314e.com/"
 # level = 1
 
-url_traversal_count = 0
+URL_TRAVERSE_COUNT = 0
 
 
 def url_crawler(url, level):
 
-    global url_traversal_count
+    global URL_TRAVERSE_COUNT
 
     unique_urls = deque([url])
     considilated_urls_list = []
@@ -50,7 +50,7 @@ def url_crawler(url, level):
         traverse_index -= 1
 
 
-    url_traversal_count = len(considilated_urls_list)
+    URL_TRAVERSE_COUNT = len(considilated_urls_list)
 
     return considilated_urls_list
 
@@ -78,7 +78,7 @@ def words_gouped(url, level):
                 groups_of_words_list.append(span_content.text)
 
 
-        ## Scraping Main from section
+        ## Scraping from Main section
 
         words_in_paras_list_raw = []
 
@@ -156,7 +156,7 @@ def frequecy_data(url, level):
 
 
     return_dict_object = {
-        'no_of_urls' : url_traversal_count,
+        'no_of_urls' : URL_TRAVERSE_COUNT,
         'common_words': [],
         'common_word_pairs': []
     }
