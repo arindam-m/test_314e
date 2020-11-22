@@ -6,7 +6,7 @@ from .scrape_logic import frequecy_data
 # Create your views here.
 
 url = "https://www.314e.com/"
-level = 1
+level = 2
 
 
 def main_func(request):
@@ -26,9 +26,10 @@ def main_func(request):
     common_word_pairs = json_data['common_word_pairs']
 
     context = {
-        'no_of_urls' : no_of_urls,
-        'common_words' : common_words,
-        'common_word_pairs' : common_word_pairs,
+        'level': level,
+        'no_of_urls': no_of_urls,
+        'common_words': common_words,
+        'common_word_pairs': common_word_pairs,
     }
 
     return render(request, 'index.html', context)

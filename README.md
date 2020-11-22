@@ -45,7 +45,7 @@ $ cd source/
 $ python manage.py runserver
 ```
 
-When the developement server is successfully booted, you get to see that it's being hosted on a localhost @ port: 8000
+When the developement server is successfully booted up, you get to see that it's being hosted on a localhost @ port: 8000
 
 ```python
 Django version 3.1.3, using settings 'project_main.settings'
@@ -84,4 +84,4 @@ And then repeat the above process to start the Django server.
 
 * [Django](https://www.djangoproject.com/) - Python Web-framework
 * [Requests](https://requests.readthedocs.io/en/master/) - HTTP library for Python
-* [Beutiful Soup](https://www.crummy.com/software/BeautifulSoup/) - Web scraper
+* [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/) - Web scraper
