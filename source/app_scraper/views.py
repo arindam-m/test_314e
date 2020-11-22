@@ -6,7 +6,7 @@ from .scrape_logic import frequecy_data
 # Create your views here.
 
 url = "https://www.314e.com/"
-level = 2
+level = 4
 
 
 def main_func(request):
