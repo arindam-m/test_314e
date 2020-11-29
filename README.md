@@ -2,6 +2,8 @@
 
 Scrape through number of web pages from the root index and traverse through all the hyperlinks for a given depth level.
 
+*PS: Current this project is being hosted on [Heroku](https://test-314e.herokuapp.com/) platform, as a means of PoC.*
+
 <br/>
 
 ## Getting Started
@@ -14,7 +16,7 @@ See deployment for notes on how to deploy the project on a live system.
 
 ### <ins>Prerequisites
 
-[Python 3.7.x](https://www.python.org/downloads/) (or above) is required.
+[Python 3.7.x](https://www.python.org/downloads/) (or any of the latest stable) is required.
 
 After cloning and moving into the directory, set up the vitural environment
 
@@ -36,12 +38,14 @@ $ python -m pip install --upgrade pip
 $ pip install -r requirements.txt
 $ pip list
 ```
+Also, making these changes to the settings.py file in the 'project_main' directory.
+```python
+ALLOWED_HOSTS = ["localhost",]
+```
 
-Finally, move into the 'source' directory and start the Django server
+Finally, we start the Django server
 
 ```bash
-$ cd source/
-
 $ python manage.py runserver
 ```
 
@@ -63,12 +67,15 @@ When this project need to be deployed on a remote production server, we would ha
 ```bash
 $ python manage.py check --deploy
 ```
-Also, making these changes to the settings.py file in the 'project_main' directory.
+
+We need to update ALLOWED_HOST in the settings with the url of the remote server's web-address.
+
 ```python
-DEBUG = False
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["localhost", "..."]
 ```
+
 Finally, get [NGINX](https://www.nginx.com/) and [Gunicorn](https://gunicorn.org/) installed as the main web-server and WSGI http-server respectively
+
 ```bash
 $ pip3 install gunicorn
 $ sudo apt-get install nginx -y
