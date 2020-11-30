@@ -2,7 +2,7 @@
 
 Scrape through number of web pages from the root index and traverse through all the hyperlinks for a given depth level.
 
-*PS: Current this project is being hosted on [Heroku](https://test-314e.herokuapp.com/) platform, as a means of PoC.*
+<b>PS:</b> *Currently, this project is live on [Heroku](https://test-314e.herokuapp.com/)*
 
 <br/>
 
@@ -38,9 +38,10 @@ $ python -m pip install --upgrade pip
 $ pip install -r requirements.txt
 $ pip list
 ```
-Also, making these changes to the settings.py file in the 'project_main' directory.
+We need to set the SECRET_KEY in our local OS as a environment variable, or set it up directly in the settings.py file in the 'project_main' directory for temporary testing purposes.
+
 ```python
-ALLOWED_HOSTS = ["localhost",]
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 ```
 
 Finally, we start the Django server
@@ -62,7 +63,7 @@ Quit the server with CTRL-BREAK.
 
 ## Deployment
 
-When this project need to be deployed on a remote production server, we would have to do the following additional checks.
+When this project need to be deployed on a remote production server*, we would have to do the following additional checks.
 
 ```bash
 $ python manage.py check --deploy
@@ -84,6 +85,11 @@ $ pip install psycopg2-binary
 And then repeat the above process to start the Django server.
 
 <br/>
+
+
+> This remote production server generally refers to a Linux machine running on AWS or Linode or alike "Infrastructure as a Service" (IaaS).
+
+>As of now, it's already hosted on Heroku. Though Heroku is meant to be used as a "Platform as a Service" (PaaS) for PoC, a <b>Procfile</b> is available in this repo which automatically connects to a web-server through Gunicorn WSGI. 
 
 ---
 
