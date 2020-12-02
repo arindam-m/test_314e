@@ -31,7 +31,7 @@ jobs:
     - name: Linting with pylint
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        pylint . --exit-zero
+        pylint . --exit-zero --disable=C,F *.py
     - name: Test with pytest
       run: |
         # pytest
