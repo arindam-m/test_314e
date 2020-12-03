@@ -34,7 +34,8 @@ jobs:
         pylint . --exit-zero --disable=C,F *.py
     - name: Running Tests
       env:
-        SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        # SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        SECRET_KEY: '&05!0n03ay-41^63&#!jfk6n!v6uft=pwf7vvo4p&dcny5)zvp'
       run: |
         python ./manage.py test
     - name: Deploy to Heroku
