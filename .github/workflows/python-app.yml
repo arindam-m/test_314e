@@ -32,9 +32,9 @@ jobs:
       run: |
         # stop the build if there are Python syntax errors or undefined names
         pylint . --exit-zero --disable=C,F *.py
-    - name: Testing with django.test.TestCase
+    - name: Testing with TestCase (Django)
       run: |
-        ./manage.py test
+        python ./manage.py test
     - name: Deploy to Heroku
       env:
         HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
