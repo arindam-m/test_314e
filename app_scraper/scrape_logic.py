@@ -1,3 +1,10 @@
+"""
+This is the main logic block.
+
+It scans through a set of web-pages,
+depending upon the depth-level of URLs
+needs to be travelled.
+"""
 import re
 import string
 from collections import Counter, deque
@@ -13,6 +20,7 @@ URL_TRAVERSE_COUNT = 0
 
 
 def url_crawler(url, level):
+    '''...'''
 
     global URL_TRAVERSE_COUNT
 
@@ -21,7 +29,7 @@ def url_crawler(url, level):
 
     traverse_index = level - 1
 
-    while len(unique_urls):
+    while len(unique_urls) > 0:
 
         if traverse_index == 0:
             for _ in range(len(unique_urls)):
@@ -34,8 +42,8 @@ def url_crawler(url, level):
             url = unique_urls.popleft()
             considilated_urls_list.append(url)
 
-            r = requests.get(url)
-            soup = BeautifulSoup(r.content, 'lxml')
+            response_obj = requests.get(url)
+            soup = BeautifulSoup(response_obj.content, 'lxml')
 
             links_to_ignore = ['#', 'javascript:void(0);', url]
             anchors = soup.find_all('a')
@@ -49,7 +57,6 @@ def url_crawler(url, level):
 
         traverse_index -= 1
 
-
     URL_TRAVERSE_COUNT = len(considilated_urls_list)
 
     return considilated_urls_list
@@ -59,26 +66,25 @@ def url_crawler(url, level):
 
 
 def words_gouped(url, level):
+    '''...'''
 
     groups_of_words_list = []
 
     considilated_urls_list = url_crawler(url, level)
 
-    for url in considilated_urls_list:
+    for _url in considilated_urls_list:
 
-        r = requests.get(url)
-        r.encoding = 'utf-8'
-        soup = BeautifulSoup(r.content, 'lxml')
+        response_obj = requests.get(_url)
+        response_obj.encoding = 'utf-8'
+        soup = BeautifulSoup(response_obj.content, 'lxml')
 
-
-        ## Scraping from Span section
+        # Scraping from Span section
 
         for span_content in soup.find_all('span'):
             if (span_content.text != '') and (span_content.text != '\n'):
                 groups_of_words_list.append(span_content.text)
 
-
-        ## Scraping from Main section
+        # Scraping from Main section
 
         words_in_paras_list_raw = []
 
@@ -90,18 +96,17 @@ def words_gouped(url, level):
 
         for words_para in words_in_paras_list_raw:
             str_list = (re.split(r"[\n\t]", words_para))
-            for str_i in str_list:
-                if str_i != '' and str_i != ' ':
-                    if str_i.endswith(' '):
-                        words_list_main.append(str_i[:-1])
-                    elif str_i.endswith('...Read More'):
-                        words_list_main.append(str_i[:-12])
-                        words_list_main.append(str_i[-9:])
+            for single_str in str_list:
+                if single_str not in ('', ' '):
+                    if single_str.endswith(' '):
+                        words_list_main.append(single_str[:-1])
+                    elif single_str.endswith('...Read More'):
+                        words_list_main.append(single_str[:-12])
+                        words_list_main.append(single_str[-9:])
                     else:
-                        words_list_main.append(str_i)
+                        words_list_main.append(single_str)
 
         groups_of_words_list += words_list_main
-
 
     return groups_of_words_list
 
@@ -110,11 +115,11 @@ def words_gouped(url, level):
 
 
 def frequecy_data(url, level):
+    '''...'''
 
     groups_of_words_list = words_gouped(url, level)
     single_str = ' '.join(groups_of_words_list)
-    single_words = re.findall("([\w+']+)", single_str.lower())
-
+    single_words = re.findall(r"([\w+']+)", single_str.lower())
 
     # print("Top 10 common words and their frequencies")
     # print("-----------------------------------------")
@@ -127,13 +132,12 @@ def frequecy_data(url, level):
     #     print(f"{word}\t: {freq}")
     # print("\n\n")
 
-
     word_pair_l = []
 
     for group_of_words in groups_of_words_list:
         words_with_punctuation = group_of_words.lower().split()
 
-        list_of_punctuations  = list(string.punctuation)
+        list_of_punctuations = list(string.punctuation)
 
         for i in range(len(words_with_punctuation) - 1):
             if words_with_punctuation[i][-1] not in list_of_punctuations:
@@ -144,7 +148,6 @@ def frequecy_data(url, level):
                 else:
                     word_pair_l.append((words_with_punctuation[i], next_word))
 
-
     # print("Top 10 common word-pairs and their frequencies")
     # print("----------------------------------------------")
     # for i in range(10):
@@ -154,9 +157,8 @@ def frequecy_data(url, level):
     #     print(f"{word_pair[0]} {word_pair[1]}\t: {freq}")
     # print("\n\n")
 
-
     return_dict_object = {
-        'no_of_urls' : URL_TRAVERSE_COUNT,
+        'no_of_urls': URL_TRAVERSE_COUNT,
         'common_words': [],
         'common_word_pairs': []
     }
@@ -165,16 +167,15 @@ def frequecy_data(url, level):
 
         single_word_tuple = Counter(single_words).most_common()[i]
         word = single_word_tuple[0]
-        freq = single_word_tuple [1]
-        if word == 'ehr' or word == 'cdr':
+        freq = single_word_tuple[1]
+        if word in ('ehr', 'cdr', 'fhir'):
             word = word.upper()
         return_dict_object['common_words'].append({word: freq})
 
         word_pair_tuple = Counter(word_pair_l).most_common()[i]
         word_pair = word_pair_tuple[0][0] + ' ' + word_pair_tuple[0][1]
-        freq = word_pair_tuple [1]
+        freq = word_pair_tuple[1]
         return_dict_object['common_word_pairs'].append({word_pair: freq})
-
 
     return return_dict_object
 
