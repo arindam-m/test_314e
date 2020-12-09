@@ -5,16 +5,19 @@ It scans through a set of web-pages,
 depending upon the depth-level of URLs
 needs to be travelled.
 """
+
 import re
 import string
+# import time
 from collections import Counter, deque
 
 import requests
 from bs4 import BeautifulSoup
 
+# start_time = time.time()
 
-# url = "https://www.314e.com/"
-# level = 1
+# _url = "https://www.314e.com/"
+# _level = 4
 
 URL_TRAVERSE_COUNT = 0
 
@@ -181,3 +184,9 @@ def frequecy_data(url, level):
 
 
 # -----------------------------------------------------------------------------#
+# print()
+# print(url_crawler(_url, _level))
+# print(len(url_crawler(_url, _level)))
+# print(len(words_gouped(_url, _level)))
+# print(frequecy_data(_url, _level))
+# print(f"\n\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
