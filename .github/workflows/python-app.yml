@@ -28,11 +28,11 @@ jobs:
         pip install pylint
         # pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Linting with pylint
+    - name: Lint with pylint
       run: |
         # stop the build if there are Python syntax errors or undefined names
         pylint . --exit-zero --disable=C,F *.py
-    - name: Running unit-tests
+    - name: Run unit-tests
       env:
         SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       run: |

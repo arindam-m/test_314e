@@ -1,4 +1,6 @@
-from django.http import JsonResponse
+import time
+
+# from django.http import JsonResponse
 from django.shortcuts import render
 
 from .logics.scraper_basic import frequecy_data
@@ -10,6 +12,8 @@ level = 1
 
 
 def main_func(request):
+
+    start_time = time.time()
 
     global url
 
@@ -30,5 +34,7 @@ def main_func(request):
         'common_words': common_words,
         'common_word_pairs': common_word_pairs,
     }
+
+    print(f"\n\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
 
     return render(request, 'index.html', context)
