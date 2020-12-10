@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 
-from .scrape_logic import frequecy_data
+from .logics.scraper_basic import frequecy_data
 
 # Create your views here.
 
@@ -15,7 +15,6 @@ def main_func(request):
 
     if request.method == "POST":
         url = request.POST['url']
-
 
     json_data = frequecy_data(url, level)
 

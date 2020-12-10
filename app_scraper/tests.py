@@ -1,8 +1,9 @@
 from django.test import TestCase
 
-from . import scrape_logic as sl
+from .logics import scraper_basic as sb
 
 # Create your tests here.
+
 
 class TestScrapeLogic(TestCase):
 
@@ -11,5 +12,5 @@ class TestScrapeLogic(TestCase):
         self.level = 1
 
     def test_url_crawler(self):
-        result = sl.url_crawler(self.url, self.level)
+        result = sb.url_crawler(self.url, self.level)
         self.assertEqual(len(result), 1)
