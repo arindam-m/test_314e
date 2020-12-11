@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 # start_time = time.time()
 
 # _url = "https://www.314e.com/"
-# _level = 4
+# _level = 2
 
 URL_TRAVERSE_COUNT = 0
 
@@ -185,8 +185,9 @@ def frequecy_data(url, level):
 
 # -----------------------------------------------------------------------------#
 # print()
-# print(url_crawler(_url, _level))
-# print(len(url_crawler(_url, _level)))
+# _unique_urls = url_crawler(_url, _level)
+# print(_unique_urls)
+# print(len(_unique_urls))
 # print(len(words_gouped(_url, _level)))
 # print(frequecy_data(_url, _level))
 # print(f"\n\nExecuted in {(time.time() - start_time):.2f} seconds.\n")

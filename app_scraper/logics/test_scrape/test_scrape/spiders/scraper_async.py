@@ -1,9 +1,7 @@
 """
-This is the main logic block.
+This is the logic block for the same scanner.
 
-It scans through a set of web-pages,
-depending upon the depth-level of URLs
-needs to be travelled.
+Through we are trying to use Scrapy for this purpose.
 """
 
 import re
@@ -17,7 +15,7 @@ from bs4 import BeautifulSoup
 
 start_time = time.time()
 
-_url = "https://www.314e.com/"
+root_index = "https://www.314e.com/"
 _level = 2
 
 URL_TRAVERSE_COUNT = 0
@@ -68,21 +66,41 @@ def url_crawler(url, level):
 
 # -----------------------------------------------------------------------------#
 
+
 class ScanSpider(scrapy.Spider):
+    '''Our very own Spider class'''
 
     name = "run_scanner"
-    start_urls = url_crawler(_url, _level)
+
+    start_urls = [root_index]
+    # start_urls = url_crawler(root_index, _level)
 
     def parse(self, response):
 
-        page = response.url.split(_url)[-1][:-1].replace('/', '-')
-        if page == '':
-            filename = "home.html"
-        else:
-            filename = f"{page}.html"
+        # page = response.url.split(root_index)[-1][:-1].replace('/', '-')
+        # if page == '':
+        #     filename = "home.html"
+        # else:
+        #     filename = f"{page}.html"
 
-        with open(filename, 'wb') as f:
-            f.write(response.body)
+        # with open(filename, 'wb') as f:
+        #     f.write(response.body)
+
+        unique_urls = [root_index]
+        links_to_ignore = ['#', 'javascript:void(0);', root_index]
+
+        for link in response.css('a::attr(href)').getall():
+            if (link not in links_to_ignore
+                    and link.startswith(root_index)
+                    and link not in unique_urls):
+                unique_urls.append(link)
+
+        print("\n\n")
+        print(unique_urls)
+        print(len(unique_urls))
+        print(f"\n\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
+        print("\n\n")
+
 
 # -----------------------------------------------------------------------------#
 
@@ -94,9 +112,9 @@ def words_gouped(url, level):
 
     considilated_urls_list = url_crawler(url, level)
 
-    for _url in considilated_urls_list:
+    for single_url in considilated_urls_list:
 
-        response_obj = requests.get(_url)
+        response_obj = requests.get(single_url)
         response_obj.encoding = 'utf-8'
         soup = BeautifulSoup(response_obj.content, 'lxml')
 
@@ -143,17 +161,6 @@ def frequecy_data(url, level):
     single_str = ' '.join(groups_of_words_list)
     single_words = re.findall(r"([\w+']+)", single_str.lower())
 
-    # print("Top 10 common words and their frequencies")
-    # print("-----------------------------------------")
-    # for i in range(10):
-    #     tuple_value = Counter(single_words).most_common()[i]
-    #     word = tuple_value[0]
-    #     freq = tuple_value [1]
-    #     if word == 'ehr' or word == 'cdr':
-    #         word = word.upper()
-    #     print(f"{word}\t: {freq}")
-    # print("\n\n")
-
     word_pair_l = []
 
     for group_of_words in groups_of_words_list:
@@ -169,15 +176,6 @@ def frequecy_data(url, level):
                         (words_with_punctuation[i], next_word[:-1]))
                 else:
                     word_pair_l.append((words_with_punctuation[i], next_word))
-
-    # print("Top 10 common word-pairs and their frequencies")
-    # print("----------------------------------------------")
-    # for i in range(10):
-    #     tuple_value = Counter(word_pair_l).most_common()[i]
-    #     word_pair = tuple_value[0]
-    #     freq = tuple_value [1]
-    #     print(f"{word_pair[0]} {word_pair[1]}\t: {freq}")
-    # print("\n\n")
 
     return_dict_object = {
         'no_of_urls': URL_TRAVERSE_COUNT,
@@ -203,9 +201,3 @@ def frequecy_data(url, level):
 
 
 # -----------------------------------------------------------------------------#
-# print()
-# print(url_crawler(_url, _level))
-# print(len(url_crawler(_url, _level)))
-# print(len(words_gouped(_url, _level)))
-# print(frequecy_data(_url, _level))
-# print(f"\n\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
