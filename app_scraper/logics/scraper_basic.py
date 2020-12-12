@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 
 # start_time = time.time()
 
-# _url = "https://www.314e.com/"
+# root_index = "https://www.314e.com/"
 # _level = 2
 
 URL_TRAVERSE_COUNT = 0
@@ -75,9 +75,9 @@ def words_gouped(url, level):
 
     considilated_urls_list = url_crawler(url, level)
 
-    for _url in considilated_urls_list:
+    for single_url in considilated_urls_list:
 
-        response_obj = requests.get(_url)
+        response_obj = requests.get(single_url)
         response_obj.encoding = 'utf-8'
         soup = BeautifulSoup(response_obj.content, 'lxml')
 
@@ -185,9 +185,9 @@ def frequecy_data(url, level):
 
 # -----------------------------------------------------------------------------#
 # print()
-# _unique_urls = url_crawler(_url, _level)
+# _unique_urls = url_crawler(root_index, _level)
 # print(_unique_urls)
 # print(len(_unique_urls))
-# print(len(words_gouped(_url, _level)))
-# print(frequecy_data(_url, _level))
+# # print(len(words_gouped(root_index, _level)))
+# # print(frequecy_data(root_index, _level))
 # print(f"\n\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
