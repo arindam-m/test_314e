@@ -19,9 +19,7 @@ json_file = os.getcwd() + "\\app_scraper\\logics\\url_data.json"
 with open(json_file, encoding='utf8') as json_data:
     url_data_dict = json.load(json_data)
 
-LINK = url_data_dict['url_list']
-WEBPAGE_LINKS = LINK
-# WEBPAGE_LINKS = ['https://www.314e.com/']
+WEBPAGE_LINKS = url_data_dict['url_list']
 WORDS_GROUPED = []
 
 
@@ -82,10 +80,15 @@ process.crawl(WordsSegregator)
 process.start()
 
 
-print("\n\n")
-# print(LINK)
-print("\n\n")
-print(WORDS_GROUPED)
-print(len(WORDS_GROUPED))
-print(f"\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
-print("\n\n")
+output_file = os.getcwd() + "\\app_scraper\\logics\\words_grouped_data.json"
+
+with open(output_file, 'w') as json_file:
+    json.dump(WORDS_GROUPED, json_file)
+
+
+# print("\n\n")
+# print("\n\n")
+# print(WORDS_GROUPED)
+# print(len(WORDS_GROUPED))
+# print(f"\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
+# print("\n\n")

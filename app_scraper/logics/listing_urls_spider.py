@@ -5,12 +5,12 @@ Through we are trying to use Scrapy for this purpose.
 
 import json
 import os
-import time
+# import time
 
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
-start_time = time.time()
+# start_time = time.time()
 
 WEBPAGE_LINKS = []
 
@@ -40,8 +40,8 @@ class ListingURLs(scrapy.Spider):
             # yield scrapy.Request(next_page, callback=self.parse)
             yield response.follow(next_page, callback=self.parse)
 
-        # json_file = os.getcwd() + "\\data.json"
-        # raw = open(json_file, 'r+')
+        # output_file = os.getcwd() + "\\data.json"
+        # raw = open(output_file, 'r+')
         # raw.truncate()
 
         # yield {
@@ -55,20 +55,16 @@ class ListingURLs(scrapy.Spider):
                 WEBPAGE_LINKS.append(link)
 
 
-def crawl_spiders(class_name):
-
-    process = CrawlerProcess()
-    process.crawl(class_name)
-    process.start()
+process = CrawlerProcess()
+process.crawl(ListingURLs)
+process.start()
 
 
-crawl_spiders(ListingURLs)
-
-json_file = os.getcwd() + "\\app_scraper\\logics\\url_data.json"
+output_file = os.getcwd() + "\\app_scraper\\logics\\url_data.json"
 url_data_dict = {'url_list': WEBPAGE_LINKS}
 
-with open(json_file, 'w') as f:
-    json.dump(url_data_dict, f)
+with open(output_file, 'w') as json_file:
+    json.dump(url_data_dict, json_file)
 
 
 # print("\n\n")
