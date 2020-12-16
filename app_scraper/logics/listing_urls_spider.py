@@ -5,14 +5,13 @@ Through we are trying to use Scrapy for this purpose.
 
 import json
 import os
-# import time
 
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
-# start_time = time.time()
 
 WEBPAGE_LINKS = []
+depth_level = 1
 
 
 class ListingURLs(scrapy.Spider):
@@ -28,7 +27,7 @@ class ListingURLs(scrapy.Spider):
     links_to_ignore = ['#', 'javascript:void(0);', root_index]
 
     custom_settings = {
-        'DEPTH_LIMIT': 4,
+        'DEPTH_LIMIT': depth_level,
         # 'FEED_URI': 'data.json',
     }
 
@@ -65,11 +64,3 @@ url_data_dict = {'url_list': WEBPAGE_LINKS}
 
 with open(output_file, 'w') as json_file:
     json.dump(url_data_dict, json_file)
-
-
-# print("\n\n")
-# print("\n\n")
-# # print(WEBPAGE_LINKS)
-# print(len(WEBPAGE_LINKS))
-# print(f"\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
-# print("\n\n")

@@ -1,0 +1,66 @@
+{
+    "common_words": [
+        {
+            "and": 911
+        },
+        {
+            "the": 815
+        },
+        {
+            "to": 787
+        },
+        {
+            "data": 561
+        },
+        {
+            "of": 560
+        },
+        {
+            "a": 383
+        },
+        {
+            "in": 367
+        },
+        {
+            "for": 358
+        },
+        {
+            "EHR": 313
+        },
+        {
+            "services": 284
+        }
+    ],
+    "common_word_pairs": [
+        {
+            "cures act": 90
+        },
+        {
+            "of the": 77
+        },
+        {
+            "big data": 65
+        },
+        {
+            "healthcare it": 65
+        },
+        {
+            "in the": 63
+        },
+        {
+            "contact us": 59
+        },
+        {
+            "muspell cdr": 58
+        },
+        {
+            "muspell automaton": 54
+        },
+        {
+            "ehr interfaces": 54
+        },
+        {
+            "data analytics": 54
+        }
+    ]
+}

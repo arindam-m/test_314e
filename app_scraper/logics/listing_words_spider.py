@@ -6,13 +6,11 @@ Through we are trying to use Scrapy for this purpose.
 import json
 import os
 import re
-import time
 
 import scrapy
 from bs4 import BeautifulSoup
 from scrapy.crawler import CrawlerProcess
 
-start_time = time.time()
 
 json_file = os.getcwd() + "\\app_scraper\\logics\\url_data.json"
 
@@ -84,11 +82,3 @@ output_file = os.getcwd() + "\\app_scraper\\logics\\words_grouped_data.json"
 
 with open(output_file, 'w') as json_file:
     json.dump(WORDS_GROUPED, json_file)
-
-
-# print("\n\n")
-# print("\n\n")
-# print(WORDS_GROUPED)
-# print(len(WORDS_GROUPED))
-# print(f"\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
-# print("\n\n")
