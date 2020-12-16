@@ -52,7 +52,7 @@
             {% csrf_token %}
                 <input type="text" name="url" style="width: 1000; height: 40" placeholder="Enter a valid URL">
                 <p class='text-muted' style="font-size: 75%;">
-                    Eg: https://www.314e.com/
+                    <b>e.g.</b> https://www.314e.com/
                 </p>
                 <button class="btn btn-success">
                     Start scanning
@@ -62,63 +62,65 @@
 
         <br>
 
-        <p class='text-muted' style="font-size: 95%;">
-            Tree traversal depth level :
-            <b>{{ level }}</b>
-        </p>
+        {% if level is not None  %}
+            <p class='text-muted' style="font-size: 95%;">
+                Tree traversal depth level :
+                <b>{{ level }}</b>
+            </p>
 
-        <p class='text-muted' style="font-size: 95%;">
-            Number of URL traversed and respective web-pages scanned:
-            <b>{{ no_of_urls }}</b>
-        </p>
+            <p class='text-muted' style="font-size: 95%;">
+                Number of URL traversed and respective web-pages scanned:
+                <b>{{ no_of_urls }}</b>
+            </p>
 
-        <br>
+            <br>
 
-        <p class='text-muted' style="font-size: 100%">
-            <b>Top 10 common words appread and their frequencies</b>
-        </p>
+            <p class='text-muted' style="font-size: 100%">
+                <b>Top 10 common words appread and their frequencies</b>
+            </p>
 
-        <table width="100" class="table table-bordered table-hover table-striped">
-            <tr class="info">
-                <th>Rank</th>
-                <th>Word</th>
-                <th>Frequency</th>
-            </tr>
-
-            {% for dict_value in common_words %}
-                <tr>
-                    <td class="counterCell"></td>
-                    {% for word, freq in dict_value.items %}
-                        <td style="width: 100px">{{ word }}</td>
-                        <td>{{ freq }}</td>
-                    {% endfor %}
+            <table width="100" class="table table-bordered table-hover table-striped">
+                <tr class="info">
+                    <th>Rank</th>
+                    <th>Word</th>
+                    <th>Frequency</th>
                 </tr>
-            {% endfor %}
-        </table>
 
-        <br>
+                {% for dict_value in common_words %}
+                    <tr>
+                        <td class="counterCell"></td>
+                        {% for word, freq in dict_value.items %}
+                            <td style="width: 100px">{{ word }}</td>
+                            <td>{{ freq }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
 
-        <p class='text-muted' style="font-size: 100%">
-            <b>Top 10 common word-pairs appread and their frequencies</b>
-        </p>
+            <br>
 
-        <table width="100" class="table table-bordered table-hover table-striped">
-            <tr class="info">
-                <th>Rank</th>
-                <th>Word Pair</th>
-                <th>Frequency</th>
-            </tr>
+            <p class='text-muted' style="font-size: 100%">
+                <b>Top 10 common word-pairs appread and their frequencies</b>
+            </p>
 
-            {% for dict_value in common_word_pairs %}
-                <tr>
-                    <td class="counterCell"></td>
-                    {% for word_pair, freq in dict_value.items %}
-                        <td style="width: 100px">{{ word_pair }}</td>
-                        <td>{{ freq }}</td>
-                    {% endfor %}
+            <table width="100" class="table table-bordered table-hover table-striped">
+                <tr class="info">
+                    <th>Rank</th>
+                    <th>Word Pair</th>
+                    <th>Frequency</th>
                 </tr>
-            {% endfor %}
-        </table>
+
+                {% for dict_value in common_word_pairs %}
+                    <tr>
+                        <td class="counterCell"></td>
+                        {% for word_pair, freq in dict_value.items %}
+                            <td style="width: 100px">{{ word_pair }}</td>
+                            <td>{{ freq }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
 
     </div>
 

@@ -1,6 +1,6 @@
 """
-This is the logic block for the same scanner.
-Through we are trying to use Scrapy for this purpose.
+This is the logic block for our spider, to collect all the grouped words
+from a list of urls scraped in the previous module.
 """
 
 import json
@@ -12,9 +12,11 @@ from bs4 import BeautifulSoup
 from scrapy.crawler import CrawlerProcess
 
 
-json_file = os.getcwd() + "\\app_scraper\\logics\\url_data.json"
+logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
 
-with open(json_file, encoding='utf8') as json_data:
+json_input_file = logics_dir + "url_data.json"
+
+with open(json_input_file, encoding='utf8') as json_data:
     url_data_dict = json.load(json_data)
 
 WEBPAGE_LINKS = url_data_dict['url_list']
@@ -78,7 +80,7 @@ process.crawl(WordsSegregator)
 process.start()
 
 
-output_file = os.getcwd() + "\\app_scraper\\logics\\words_grouped_data.json"
+output_file = logics_dir + "words_grouped_data.json"
 
 with open(output_file, 'w') as json_file:
     json.dump(WORDS_GROUPED, json_file)

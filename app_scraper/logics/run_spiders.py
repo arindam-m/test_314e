@@ -2,23 +2,21 @@ import json
 import os
 import re
 import string
-import time
+# import time
 from collections import Counter
 
+# start_time = time.time()
 
-start_time = time.time()
+logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
 
 
 def execute_all_jobs():
 
     def run_standalone_spider(file_name):
-
-        cwd = os.getcwd() + '\\app_scraper\\logics\\'
-        command = 'python ' + cwd + f'{file_name}.py'
+        command = 'python ' + logics_dir + f'{file_name}.py'
         os.system(command)
 
     def run_all_spiders():
-
         spider_files = [
             'listing_urls_spider',
             'listing_words_spider',
@@ -29,9 +27,9 @@ def execute_all_jobs():
 
     run_all_spiders()
 
-    json_file = os.getcwd() + "\\app_scraper\\logics\\words_grouped_data.json"
+    json_input_file = logics_dir + "words_grouped_data.json"
 
-    with open(json_file, encoding='utf8') as json_data:
+    with open(json_input_file, encoding='utf8') as json_data:
         words_grouped_data_list = json.load(json_data)
 
     WORDS_GROUPED = words_grouped_data_list
@@ -81,7 +79,7 @@ def execute_all_jobs():
 
         return return_dict_object
 
-    output_file = os.getcwd() + "\\app_scraper\\logics\\data_frequency.json"
+    output_file = logics_dir + "data_frequency.json"
     data_frequency_dict = data_frequency()
 
     with open(output_file, 'w') as json_file:
@@ -91,4 +89,4 @@ def execute_all_jobs():
 # execute_all_jobs()
 
 
-print(f"\n\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
+# print(f"\n\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
