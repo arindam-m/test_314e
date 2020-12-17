@@ -63,8 +63,8 @@ def main_func(request):
 
             return render(request, 'index.html', context)
 
-    print()
+    print('\n\n')
     print(request.POST)
-    print(f"\n\nExecuted in {(time.time() - start_time):.2f} seconds.\n")
+    print(f"\nExecuted in {(time.time() - start_time):.2f} seconds.\n\n")
 
     return render(request, 'index.html')

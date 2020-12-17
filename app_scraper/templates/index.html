@@ -4,52 +4,81 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>3.14e Aggregator</title>
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
     <style type="text/css">
-        body{
+        body {
             background-color: #f2f2f2;
         }
+
         table {
             counter-reset: tableCount;
         }
+
         .counterCell:before {
             content: counter(tableCount);
             counter-increment: tableCount;
         }
-        .table{
-            max-width: 40%;
+
+        .table {
+            max-width: 50%;
         }
-        #header_id{
+
+        #header_id {
             /* position: fixed; */
             width: 100%;
         }
     </style>
-
 </head>
 
 <body>
-
     <div class="jumbotron" style="background-color: #5e6472; height: 10px;" id="header_id">
         <center>
             <h1 style="margin-top: -30px; color:white;">
-                Scraped Data Info
+                Magic with Data!
             </h1>
         </center>
     </div>
 
     <div class="container">
-
-        <div class="scrap">
-            <form action="{% url 'main_view_func' %}" method="POST">
+        <form action="{% url 'main_view_func' %}" method="POST">
             {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputURL">URL of the main website to scan</label>
+                    <input type="text" name="url" class="form-control" id="inputURL"
+                        placeholder="Enter a valid URL address">
+                    <p class='text-muted' style="font-size: 100%;">
+                        <b>e.g.</b> https://www.314e.com/
+                    </p>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="inputDepth">Depth</label>
+                    <select id="inputDepth" name="depth" class="form-control">
+                        <option value="0" selected>Level: 0 (Root Index)</option>
+                        <option value="1">Level: 1</option>
+                        <option value="2">Level: 2</option>
+                        <option value="3">Level: 3</option>
+                        <option value="4">Level: 4</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputScan">Scan</label>
+                    <br>
+                    <button type="submit" class="btn btn-success" id=" inputScan">
+                        Press to start
+                    </button> &ensp;
+                </div>
+            </div>
+        </form>
+        <br>
+
+        <!-- <div class="scrap">
+            <form action="{% url 'main_view_func' %}" method="POST">
+                {% csrf_token %}
                 <input type="text" name="url" style="width: 1000; height: 40" placeholder="Enter a valid URL">
                 <p class='text-muted' style="font-size: 75%;">
                     <b>e.g.</b> https://www.314e.com/
@@ -58,69 +87,73 @@
                     Start scanning
                 </button> &ensp;
             </form>
-        </div>
+        </div> -->
 
         <br>
 
-        {% if level is not None  %}
-            <p class='text-muted' style="font-size: 95%;">
-                Tree traversal depth level :
-                <b>{{ level }}</b>
-            </p>
+        {% if level is not None %}
+        <p class='text-muted' style="font-size: 95%;">
+            Tree traversal depth level :
+            <b>{{ level }}</b>
+        </p>
 
-            <p class='text-muted' style="font-size: 95%;">
-                Number of URL traversed and respective web-pages scanned:
-                <b>{{ no_of_urls }}</b>
-            </p>
+        <p class='text-muted' style="font-size: 95%;">
+            Number of URL traversed and respective web-pages scanned:
+            <b>{{ no_of_urls }}</b>
+        </p>
 
-            <br>
+        <br>
 
-            <p class='text-muted' style="font-size: 100%">
-                <b>Top 10 common words appread and their frequencies</b>
-            </p>
+        <div class="form-row">
+            <div class=" col-md-6">
+                <p class='text-muted' style="font-size: 100%">
+                    <b>Top 10 common words appread and their frequencies</b>
+                </p>
 
-            <table width="100" class="table table-bordered table-hover table-striped">
-                <tr class="info">
-                    <th>Rank</th>
-                    <th>Word</th>
-                    <th>Frequency</th>
-                </tr>
+                <table width="100" class="table table-bordered table-hover table-striped">
+                    <tr class="info">
+                        <th>Rank</th>
+                        <th>Word</th>
+                        <th>Frequency</th>
+                    </tr>
 
-                {% for dict_value in common_words %}
+                    {% for dict_value in common_words %}
                     <tr>
                         <td class="counterCell"></td>
                         {% for word, freq in dict_value.items %}
-                            <td style="width: 100px">{{ word }}</td>
-                            <td>{{ freq }}</td>
+                        <td style="width: 100px">{{ word }}</td>
+                        <td>{{ freq }}</td>
                         {% endfor %}
                     </tr>
-                {% endfor %}
-            </table>
+                    {% endfor %}
+                </table>
+            </div>
 
-            <br>
+            <div class=" col-md-6">
+                <p class='text-muted' style="font-size: 100%">
+                    <b>Top 10 common word-pairs appread and their frequencies</b>
+                </p>
 
-            <p class='text-muted' style="font-size: 100%">
-                <b>Top 10 common word-pairs appread and their frequencies</b>
-            </p>
+                <table width="100" class="table table-bordered table-hover table-striped">
+                    <tr class="info">
+                        <th>Rank</th>
+                        <th>Word Pair</th>
+                        <th>Frequency</th>
+                    </tr>
 
-            <table width="100" class="table table-bordered table-hover table-striped">
-                <tr class="info">
-                    <th>Rank</th>
-                    <th>Word Pair</th>
-                    <th>Frequency</th>
-                </tr>
-
-                {% for dict_value in common_word_pairs %}
+                    {% for dict_value in common_word_pairs %}
                     <tr>
                         <td class="counterCell"></td>
                         {% for word_pair, freq in dict_value.items %}
-                            <td style="width: 100px">{{ word_pair }}</td>
-                            <td>{{ freq }}</td>
+                        <td style="width: 100px">{{ word_pair }}</td>
+                        <td>{{ freq }}</td>
                         {% endfor %}
                     </tr>
-                {% endfor %}
-            </table>
-        {% endif %}
+                    {% endfor %}
+                </table>
+                {% endif %}
+            </div>
+        </div>
 
     </div>
 
