@@ -29,16 +29,17 @@ def main_func(request):
 
     if request.method == "POST":
 
-        _url = request.POST['url']
+        post_url = request.POST['url']
+        post_depth = int(request.POST['depth'])
 
         output_file = logics_dir + "input_post_data.json"
-        input_data_dict = {'root_url': _url,
-                           'depth_level': 1}
+        input_data_dict = {'root_url': post_url,
+                           'depth_level': post_depth}
 
         with open(output_file, 'w') as json_file:
             json.dump(input_data_dict, json_file)
 
-        if 'https://' not in _url:
+        if 'https://' not in post_url:
             messages.error(request, "Error")
 
         else:
