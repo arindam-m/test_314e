@@ -38,7 +38,7 @@
     <div class="jumbotron" style="background-color: #5e6472; height: 10px;" id="header_id">
         <center>
             <h1 style="margin-top: -30px; color:white;">
-                Magic with Data!
+                Analysis of Scanned Data
             </h1>
         </center>
     </div>
@@ -48,18 +48,18 @@
             {% csrf_token %}
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label for="inputURL">URL of the main website to scan</label>
+                    <label for="inputURL">URL</label>
                     <input type="text" name="url" class="form-control" id="inputURL"
-                        placeholder="Enter a valid URL address">
-                    <p class='text-muted' style="font-size: 100%;">
-                        <b>e.g.</b> https://www.314e.com/
+                        placeholder="Enter a valid web-address">
+                    <p class='text-muted' style="font-size: 5%;">
+                        <b> e.g.</b> https://www.314e.com/
                     </p>
                 </div>
                 <div class="form-group col-md-2">
                     <label for="inputDepth">Depth</label>
                     <select id="inputDepth" name="depth" class="form-control">
-                        <option value="0" selected>Level: 0 (Root Index)</option>
-                        <option value="1">Depth Level: 1</option>
+                        <option value="0">Level: 0 (Home Page)</option>
+                        <option value="1" selected>Depth Level: 1</option>
                         <option value="2">Depth Level: 2</option>
                         <option value="3">Depth Level: 3</option>
                         <option value="4">Depth Level: 4</option>
@@ -69,7 +69,7 @@
                     <label for="inputScan">Scan</label>
                     <br>
                     <button type="submit" class="btn btn-success" id=" inputScan">
-                        Press to start
+                        Press to Start
                     </button> &ensp;
                 </div>
             </div>
