@@ -10,14 +10,14 @@ from .logics.run_spiders import execute_all_jobs
 
 # Create your views here.
 
-logics_dir = os.getcwd() + "\\app_scraper\\logics\\"
-
 ACCESS_KEY = os.environ.get('S3_ACCESS_KEY_ID')
 SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_ACCESS_KEY')
 
 s3_resource = boto3.resource('s3',
                              aws_access_key_id=ACCESS_KEY,
                              aws_secret_access_key=SECRET_ACCESS_KEY)
+
+logics_dir = os.getcwd() + "\\app_scraper\\logics\\"
 
 
 def fetch_json_content(file_name):
@@ -27,10 +27,10 @@ def fetch_json_content(file_name):
     # with open(logics_dir + input_file, encoding='utf8') as json_data:
     #     json_content = json.load(json_data)
 
-    j_data = s3_resource.Object('test-314e',
-                                f'jsons/{input_file}').get()['Body']
+    json_data = s3_resource.Object('test-314e',
+                                   f'jsons/{input_file}').get()['Body']
 
-    json_content = json.loads(j_data.read().decode('utf-8'))
+    json_content = json.loads(json_data.read().decode('utf-8'))
 
     return json_content
 
@@ -56,9 +56,7 @@ def main_func(request):
 
         s3_resource.Object(
             'test-314e',
-            f'jsons/{output_file}').put(
-                Body=json.dumps(
-                    input_data_dict))
+            f'jsons/{output_file}').put(Body=json.dumps(input_data_dict))
 
         if 'https://' not in post_url:
             messages.error(request, "Error")

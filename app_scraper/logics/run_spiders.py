@@ -9,14 +9,14 @@ import boto3
 
 # start_time = time.time()
 
-logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
-
 ACCESS_KEY = os.environ.get('S3_ACCESS_KEY_ID')
 SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_ACCESS_KEY')
 
 s3_resource = boto3.resource('s3',
                              aws_access_key_id=ACCESS_KEY,
                              aws_secret_access_key=SECRET_ACCESS_KEY)
+
+logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
 
 
 def execute_all_jobs():
@@ -36,10 +36,15 @@ def execute_all_jobs():
 
     run_all_spiders()
 
-    json_input_file = logics_dir + "words_grouped_data.json"
+    input_file = "words_grouped_data.json"
 
-    with open(json_input_file, encoding='utf8') as json_data:
-        words_grouped_data_list = json.load(json_data)
+    # with open(logics_dir + input_file, encoding='utf8') as json_data:
+    #     words_grouped_data_list = json.load(json_data)
+
+    json_data = s3_resource.Object('test-314e',
+                                   f'jsons/{input_file}').get()['Body']
+
+    words_grouped_data_list = json.loads(json_data.read().decode('utf-8'))
 
     WORDS_GROUPED = words_grouped_data_list
 
@@ -88,11 +93,15 @@ def execute_all_jobs():
 
         return return_dict_object
 
-    output_file = logics_dir + "data_frequency.json"
+    output_file = "data_frequency.json"
     data_frequency_dict = data_frequency()
 
-    with open(output_file, 'w') as json_file:
-        json.dump(data_frequency_dict, json_file)
+    # with open(logics_dir + output_file, 'w') as json_file:
+    #     json.dump(data_frequency_dict, json_file)
+
+    s3_resource.Object(
+        'test-314e',
+        f'jsons/{output_file}').put(Body=json.dumps(data_frequency_dict))
 
 
 # execute_all_jobs()

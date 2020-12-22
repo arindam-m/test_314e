@@ -10,22 +10,27 @@ import boto3
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
-logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
-
-json_input_file = logics_dir + "input_post_data.json"
-
-with open(json_input_file, encoding='utf8') as json_data:
-    input_data_dict = json.load(json_data)
-
-root_index = input_data_dict['root_url']
-WEBPAGE_LINKS = [root_index]
-
 ACCESS_KEY = os.environ.get('S3_ACCESS_KEY_ID')
 SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_ACCESS_KEY')
 
 s3_resource = boto3.resource('s3',
                              aws_access_key_id=ACCESS_KEY,
                              aws_secret_access_key=SECRET_ACCESS_KEY)
+
+logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
+
+input_file = "input_post_data.json"
+
+# with open(logics_dir + input_file, encoding='utf8') as json_data:
+#     input_data_dict = json.load(json_data)
+
+json_data = s3_resource.Object('test-314e',
+                               f'jsons/{input_file}').get()['Body']
+
+input_data_dict = json.loads(json_data.read().decode('utf-8'))
+
+root_index = input_data_dict['root_url']
+WEBPAGE_LINKS = [root_index]
 
 
 class ListingURLs(scrapy.Spider):
@@ -73,8 +78,12 @@ if input_data_dict['depth_level'] > 0:
     process.start()
 
 
-output_file = logics_dir + "url_data.json"
+output_file = "url_data.json"
 url_data_dict = {'url_list': WEBPAGE_LINKS}
 
-with open(output_file, 'w') as json_file:
-    json.dump(url_data_dict, json_file)
+# with open(logics_dir + output_file, 'w') as json_file:
+#     json.dump(url_data_dict, json_file)
+
+s3_resource.Object(
+    'test-314e',
+    f'jsons/{output_file}').put(Body=json.dumps(url_data_dict))

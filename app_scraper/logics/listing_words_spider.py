@@ -12,22 +12,27 @@ import scrapy
 from bs4 import BeautifulSoup
 from scrapy.crawler import CrawlerProcess
 
-logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
-
-json_input_file = logics_dir + "url_data.json"
-
-with open(json_input_file, encoding='utf8') as json_data:
-    url_data_dict = json.load(json_data)
-
-WEBPAGE_LINKS = url_data_dict['url_list']
-WORDS_GROUPED = []
-
 ACCESS_KEY = os.environ.get('S3_ACCESS_KEY_ID')
 SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_ACCESS_KEY')
 
 s3_resource = boto3.resource('s3',
                              aws_access_key_id=ACCESS_KEY,
                              aws_secret_access_key=SECRET_ACCESS_KEY)
+
+logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
+
+input_file = "url_data.json"
+
+# with open(logics_dir + input_file, encoding='utf8') as json_data:
+#     url_data_dict = json.load(json_data)
+
+json_data = s3_resource.Object('test-314e',
+                               f'jsons/{input_file}').get()['Body']
+
+url_data_dict = json.loads(json_data.read().decode('utf-8'))
+
+WEBPAGE_LINKS = url_data_dict['url_list']
+WORDS_GROUPED = []
 
 
 def words_gouped(response):
@@ -87,7 +92,11 @@ process.crawl(WordsSegregator)
 process.start()
 
 
-output_file = logics_dir + "words_grouped_data.json"
+output_file = "words_grouped_data.json"
 
-with open(output_file, 'w') as json_file:
-    json.dump(WORDS_GROUPED, json_file)
+# with open(logics_dir + output_file, 'w') as json_file:
+#     json.dump(WORDS_GROUPED, json_file)
+
+s3_resource.Object(
+    'test-314e',
+    f'jsons/{output_file}').put(Body=json.dumps(WORDS_GROUPED))
