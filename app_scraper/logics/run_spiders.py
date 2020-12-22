@@ -5,9 +5,18 @@ import string
 # import time
 from collections import Counter
 
+import boto3
+
 # start_time = time.time()
 
 logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
+
+ACCESS_KEY = os.environ.get('S3_ACCESS_KEY_ID')
+SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_ACCESS_KEY')
+
+s3_resource = boto3.resource('s3',
+                             aws_access_key_id=ACCESS_KEY,
+                             aws_secret_access_key=SECRET_ACCESS_KEY)
 
 
 def execute_all_jobs():

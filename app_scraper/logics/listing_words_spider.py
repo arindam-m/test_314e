@@ -7,10 +7,10 @@ import json
 import os
 import re
 
+import boto3
 import scrapy
 from bs4 import BeautifulSoup
 from scrapy.crawler import CrawlerProcess
-
 
 logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
 
@@ -21,6 +21,13 @@ with open(json_input_file, encoding='utf8') as json_data:
 
 WEBPAGE_LINKS = url_data_dict['url_list']
 WORDS_GROUPED = []
+
+ACCESS_KEY = os.environ.get('S3_ACCESS_KEY_ID')
+SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_ACCESS_KEY')
+
+s3_resource = boto3.resource('s3',
+                             aws_access_key_id=ACCESS_KEY,
+                             aws_secret_access_key=SECRET_ACCESS_KEY)
 
 
 def words_gouped(response):

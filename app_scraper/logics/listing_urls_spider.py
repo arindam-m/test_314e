@@ -6,6 +6,7 @@ to collect all the webpage-links for a given depth.
 import json
 import os
 
+import boto3
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
@@ -18,6 +19,13 @@ with open(json_input_file, encoding='utf8') as json_data:
 
 root_index = input_data_dict['root_url']
 WEBPAGE_LINKS = [root_index]
+
+ACCESS_KEY = os.environ.get('S3_ACCESS_KEY_ID')
+SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_ACCESS_KEY')
+
+s3_resource = boto3.resource('s3',
+                             aws_access_key_id=ACCESS_KEY,
+                             aws_secret_access_key=SECRET_ACCESS_KEY)
 
 
 class ListingURLs(scrapy.Spider):

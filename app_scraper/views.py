@@ -2,6 +2,7 @@ import json
 import os
 import time
 
+import boto3
 from django.contrib import messages
 from django.shortcuts import render
 
@@ -11,13 +12,25 @@ from .logics.run_spiders import execute_all_jobs
 
 logics_dir = os.getcwd() + "\\app_scraper\\logics\\"
 
+ACCESS_KEY = os.environ.get('S3_ACCESS_KEY_ID')
+SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_ACCESS_KEY')
+
+s3_resource = boto3.resource('s3',
+                             aws_access_key_id=ACCESS_KEY,
+                             aws_secret_access_key=SECRET_ACCESS_KEY)
+
 
 def fetch_json_content(file_name):
 
-    json_input_file = logics_dir + f'{file_name}.json'
+    input_file = f'{file_name}.json'
 
-    with open(json_input_file, encoding='utf8') as json_data:
-        json_content = json.load(json_data)
+    # with open(logics_dir + input_file, encoding='utf8') as json_data:
+    #     json_content = json.load(json_data)
+
+    j_data = s3_resource.Object('test-314e',
+                                f'jsons/{input_file}').get()['Body']
+
+    json_content = json.loads(j_data.read().decode('utf-8'))
 
     return json_content
 
@@ -32,12 +45,20 @@ def main_func(request):
         post_url = request.POST['url']
         post_depth = int(request.POST['depth'])
 
-        output_file = logics_dir + "input_post_data.json"
+        output_file = "input_post_data.json"
         input_data_dict = {'root_url': post_url,
                            'depth_level': post_depth}
 
-        with open(output_file, 'w') as json_file:
-            json.dump(input_data_dict, json_file)
+        # with open(logics_dir + output_file, 'w') as json_file:
+        #     json.dump(input_data_dict, json_file)
+
+        # s3_resource.create_bucket(Bucket='my_bucket')
+
+        s3_resource.Object(
+            'test-314e',
+            f'jsons/{output_file}').put(
+                Body=json.dumps(
+                    input_data_dict))
 
         if 'https://' not in post_url:
             messages.error(request, "Error")
