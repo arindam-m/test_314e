@@ -6,6 +6,7 @@ from a list of urls scraped in the previous module.
 import json
 import os
 import re
+from platform import system
 
 import boto3
 import scrapy
@@ -19,7 +20,10 @@ s3_resource = boto3.resource('s3',
                              aws_access_key_id=ACCESS_KEY,
                              aws_secret_access_key=SECRET_ACCESS_KEY)
 
-logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
+if system() == 'Linux':
+    logics_dir = os.getcwd() + "/app_scraper/logics/"
+elif system() == 'Windows':
+    logics_dir = os.getcwd() + "\\app_scraper\\logics\\"
 
 input_file = "url_data.json"
 

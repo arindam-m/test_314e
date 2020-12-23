@@ -4,6 +4,7 @@ import re
 import string
 # import time
 from collections import Counter
+from platform import system
 
 import boto3
 
@@ -16,7 +17,10 @@ s3_resource = boto3.resource('s3',
                              aws_access_key_id=ACCESS_KEY,
                              aws_secret_access_key=SECRET_ACCESS_KEY)
 
-logics_dir = os.getcwd() + '\\app_scraper\\logics\\'
+if system() == 'Linux':
+    logics_dir = os.getcwd() + "/app_scraper/logics/"
+elif system() == 'Windows':
+    logics_dir = os.getcwd() + "\\app_scraper\\logics\\"
 
 
 def execute_all_jobs():
