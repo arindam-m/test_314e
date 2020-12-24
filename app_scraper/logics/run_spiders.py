@@ -77,6 +77,7 @@ def execute_all_jobs():
                                             next_word))
 
         return_dict_object = {
+            'single_words': f"{len(single_words):,d}",
             'common_words': [],
             'common_word_pairs': []
         }

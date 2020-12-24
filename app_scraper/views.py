@@ -73,12 +73,14 @@ def main_func(request):
 
             no_of_urls = len(fetch_json_content('url_data')['url_list'])
 
+            single_words = main_output_data['single_words']
             common_words = main_output_data['common_words']
             common_word_pairs = main_output_data['common_word_pairs']
 
             context = {
                 'level': level,
                 'no_of_urls': no_of_urls,
+                'single_words': single_words,
                 'common_words': common_words,
                 'common_word_pairs': common_word_pairs,
             }
