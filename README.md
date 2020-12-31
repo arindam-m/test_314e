@@ -1,8 +1,10 @@
 # Web Scrapper
 
-Scrape through number of web pages from the root index and traverse through all the hyperlinks for a given depth level.
+Scrape through number of web pages from the root index (home page) of a given url and traverse through all the hyperlinks for a given depth level, and display the number of a particular word and a word-pair has appread.
 
-<b>PS:</b> *Currently, this project is live on [Heroku](https://test-314e.herokuapp.com/)*
+<br/>
+
+<b>|</b> *Currently, this project is live on [Heroku](https://test-314e.herokuapp.com/)*
 
 <br/>
 
@@ -38,10 +40,13 @@ $ python -m pip install --upgrade pip
 $ pip install -r requirements.txt
 $ pip list
 ```
-We need to set the SECRET_KEY in our local OS as a environment variable, or set it up directly in the settings.py file in the 'project_main' directory for temporary testing purposes.
+We need to set the SECRET_KEY of our Django project and AWS S3 bucket respectively, in our local OS as a environment variable.
 
 ```python
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+
+ACCESS_KEY = os.environ.get('S3_ACCESS_KEY_ID')
+SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_ACCESS_KEY')
 ```
 
 Finally, we start the Django server
@@ -87,14 +92,14 @@ And then repeat the above process to start the Django server.
 <br/>
 
 
-> This remote production server generally refers to a Linux machine running on AWS or Linode or alike "Infrastructure as a Service" (IaaS).
+> This remote production server generally refers to a Linux machine running on AWS/Linode or something similar.
 
->As of now, it's already hosted on Heroku. Though Heroku is meant to be used as a "Platform as a Service" (PaaS) for PoC, a <b>Procfile</b> is available in this repo which automatically connects to a web-server through Gunicorn WSGI. 
+>As of now, it's already hosted on [Heroku](https://test-314e.herokuapp.com/) cloud. Though Heroku is meant to be used as a PaaS for Proof of Concept, a <b>Procfile</b> is available in this repo which automatically connects to a web-server through Gunicorn WSGI. 
 
 ---
 
 ## Built With
 
-* [Django](https://www.djangoproject.com/) - Python Web-framework
-* [Requests](https://requests.readthedocs.io/en/master/) - HTTP library for Python
-* [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/) - Web scraper
+* [Django](https://www.djangoproject.com/) - Full stack web-framework
+* [Scrappy](https://scrapy.org/) - A web-framework for extracting data
+* [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/) - A parser for web scrapping
