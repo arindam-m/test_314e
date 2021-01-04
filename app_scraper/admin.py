@@ -1,5 +1,5 @@
-# from django.contrib import admin
-# from .models import VisualData
+from django.contrib import admin
+from .models import VisualData
 
 
-# admin.site.register(VisualData)
+admin.site.register(VisualData)
