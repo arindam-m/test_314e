@@ -36,7 +36,7 @@ jobs:
       env:
         SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
       run: |
-        python ./manage.py makedmigrations
+        python ./manage.py makemigrations
         python ./manage.py migrate
         python ./manage.py test
     - name: Deploy to Heroku
