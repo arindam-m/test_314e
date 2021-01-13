@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <title>3.14e Aggregator</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -30,6 +31,17 @@
         #header_id {
             /* position: fixed; */
             width: 100%;
+            border-radius: 0em;
+        }
+
+        .progress {
+            height: 0.5em;
+            border-radius: 0.25em;
+        }
+
+        .progress-bar {
+            height: 0.5em;
+            border-radius: 0.25em;
         }
     </style>
 </head>
@@ -75,78 +87,70 @@
             </div>
         </form>
 
-        <br>
+        {% if task_id is not None %}
+        <div class="row">
+            <div class=" col-md-10">
+                <br>
 
-        {% if level is not None %}
-        <p class='text-muted' style="font-size: 95%;">
-            Tree traversal depth level :
-            <b>{{ level }}</b>
-        </p>
+                <div class="progress">
+                    <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">
+                        &nbsp;
+                    </div>
+                </div>
 
-        <p class='text-muted' style="font-size: 95%;">
-            Number of URL traversed :
-            <b>{{ no_of_urls }}</b>
-        </p>
-
-        <p class='text-muted' style="font-size: 95%;">
-            Number of words scanned :
-            <b>{{ single_words }}</b>
-        </p>
-
-        <br>
-
-        <div class="form-row">
-            <div class=" col-md-6">
-                <p class='text-muted' style="font-size: 100%">
-                    <b>Top 10 common words appread and their frequencies</b>
-                </p>
-
-                <table width="100" class="table table-bordered table-hover table-striped">
-                    <tr class="info">
-                        <th width="50">Rank</th>
-                        <th width="200">Word</th>
-                        <th width="50">Frequency</th>
-                    </tr>
-
-                    {% for dict_value in common_words %}
-                    <tr>
-                        <td class="counterCell text-center"></td>
-                        {% for word, freq in dict_value.items %}
-                        <td style="width: 100px">{{ word }}</td>
-                        <td class="text-center">{{ freq }}</td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-
-            <div class=" col-md-6">
-                <p class='text-muted' style="font-size: 100%">
-                    <b>Top 10 common word-pairs appread and their frequencies</b>
-                </p>
-
-                <table width="100" class="table table-bordered table-hover table-striped">
-                    <tr class="info">
-                        <th width="50">Rank</th>
-                        <th width="200">Word Pair</th>
-                        <th width="50">Frequency</th>
-                    </tr>
-
-                    {% for dict_value in common_word_pairs %}
-                    <tr>
-                        <td class="counterCell text-center"></td>
-                        {% for word_pair, freq in dict_value.items %}
-                        <td style="width: 100px">{{ word_pair }}</td>
-                        <td class="text-center">{{ freq }}</td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </table>
-                {% endif %}
+                <div id="progress-bar-message" style="font-size: 75%;"></div>
             </div>
         </div>
+        {% endif %}
+
+        <br>
+
+        <div id="completed-task-result"></div>
+
+        <!-- <div id="celery-result"></div> -->
 
     </div>
+
+
+    <script src="{% static 'custom_celery_progress.js' %}"></script>
+
+    {% if task_id %}
+    <script>
+        //JavaScript
+        document.addEventListener("DOMContentLoaded", function () {
+            var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+            CeleryProgressBar.initProgressBar(progressUrl);
+        });
+
+        // JQuery
+        var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+
+        function customResult(resultElement, result) {
+            $(resultElement).append(
+                $('<p>').text('Sum of all seconds is ' + result)
+            );
+        }
+
+        $(function () {
+            CeleryProgressBar.initProgressBar(progressUrl, {
+                onResult: customResult,
+            })
+        });
+
+        // AJAX
+        $.ajax({
+            url: "{% url 'view_func_present_data' %}",
+            type: "GET",
+            success: function (data) {
+                // console.log(data);
+                $('#completed-task-result').html(data);
+            },
+            failure: function (data) {
+                console.log(errMsg);
+            }
+        });
+    </script>
+    {% endif %}
 
 </body>
 

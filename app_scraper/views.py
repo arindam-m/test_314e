@@ -1,15 +1,14 @@
 import json
 import os
-import time
+from time import sleep
 from platform import system
 
 import boto3
 from django.contrib import messages
+# from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
 from .logics.run_spiders import execute_all_jobs
-
-# Create your views here.
 
 ACCESS_KEY = os.environ.get('S3_ACCESS_KEY_ID')
 SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_ACCESS_KEY')
@@ -42,8 +41,6 @@ def fetch_json_content(file_name):
 def main_func(request):
     '''This is our main view function'''
 
-    start_time = time.time()
-
     if request.method == "POST":
 
         post_url = request.POST['url']
@@ -66,31 +63,45 @@ def main_func(request):
             messages.error(request, "Error")
 
         else:
-            execute_all_jobs()
 
-            main_output_data = fetch_json_content('data_frequency')
-            level = fetch_json_content('input_post_data')['depth_level']
+            output_file = "data_frequency.json"
+            empty_dict = {}
+            s3_resource.Object(
+                'test-314e',
+                f'jsons/{output_file}').put(Body=json.dumps(empty_dict))
 
-            no_of_urls = len(fetch_json_content('url_data')['url_list'])
-
-            single_words = main_output_data['single_words']
-            common_words = main_output_data['common_words']
-            common_word_pairs = main_output_data['common_word_pairs']
+            result = execute_all_jobs.apply_async()
 
             context = {
-                'level': level,
-                'no_of_urls': no_of_urls,
-                'single_words': single_words,
-                'common_words': common_words,
-                'common_word_pairs': common_word_pairs,
+                'task_id': result.task_id,
             }
-
-            print(f"\n\nExecuted in {(time.time() - start_time):.2f} seconds.")
 
             return render(request, 'index.html', context)
 
-    print('\n\n')
-    print(request.POST)
-    print(f"\nExecuted in {(time.time() - start_time):.2f} seconds.\n\n")
-
     return render(request, 'index.html')
+
+
+def func_present_data(request):
+
+    main_output_data = fetch_json_content('data_frequency')
+
+    while len(main_output_data) == 0:
+        sleep(0.75)
+        main_output_data = fetch_json_content('data_frequency')
+
+    level = fetch_json_content('input_post_data')['depth_level']
+    no_of_urls = len(fetch_json_content('url_data')['url_list'])
+
+    single_words = main_output_data['single_words']
+    common_words = main_output_data['common_words']
+    common_word_pairs = main_output_data['common_word_pairs']
+
+    context = {
+        'level': level,
+        'no_of_urls': no_of_urls,
+        'single_words': single_words,
+        'common_words': common_words,
+        'common_word_pairs': common_word_pairs,
+    }
+
+    return render(request, 'data-table.html', context)

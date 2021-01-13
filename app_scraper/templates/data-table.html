@@ -1,0 +1,68 @@
+{% if level is not None %}
+<p class='text-muted' style="font-size: 95%;">
+    Tree traversal depth level :
+    <b>{{ level }}</b>
+</p>
+
+<p class='text-muted' style="font-size: 95%;">
+    Number of URL traversed :
+    <b>{{ no_of_urls }}</b>
+</p>
+
+<p class='text-muted' style="font-size: 95%;">
+    Number of words scanned :
+    <b>{{ single_words }}</b>
+</p>
+
+<br>
+
+<div class="row">
+    <div class=" col-md-6">
+        <p class='text-muted' style="font-size: 100%">
+            <b>Top 10 common words appread and their frequencies</b>
+        </p>
+
+        <table width="100" class="table table-bordered table-hover table-striped">
+            <tr class="info">
+                <th width="50">Rank</th>
+                <th width="200">Word</th>
+                <th width="50">Frequency</th>
+            </tr>
+
+            {% for dict_value in common_words %}
+            <tr>
+                <td class="counterCell text-center"></td>
+                {% for word, freq in dict_value.items %}
+                <td style="width: 100px">{{ word }}</td>
+                <td class="text-center">{{ freq }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class=" col-md-6">
+        <p class='text-muted' style="font-size: 100%">
+            <b>Top 10 common word-pairs appread and their frequencies</b>
+        </p>
+
+        <table width="100" class="table table-bordered table-hover table-striped">
+            <tr class="info">
+                <th width="50">Rank</th>
+                <th width="200">Word Pair</th>
+                <th width="50">Frequency</th>
+            </tr>
+
+            {% for dict_value in common_word_pairs %}
+            <tr>
+                <td class="counterCell text-center"></td>
+                {% for word_pair, freq in dict_value.items %}
+                <td style="width: 100px">{{ word_pair }}</td>
+                <td class="text-center">{{ freq }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endif %}

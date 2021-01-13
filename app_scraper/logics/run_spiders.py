@@ -1,12 +1,15 @@
 import json
 import os
+# import pickle
 import re
 import string
-# import time
+import time
 from collections import Counter
 from platform import system
 
 import boto3
+from celery import shared_task
+from celery_progress.backend import ProgressRecorder
 
 # start_time = time.time()
 
@@ -23,22 +26,39 @@ elif system() == 'Windows':
     logics_dir = os.getcwd() + "\\app_scraper\\logics\\"
 
 
-def execute_all_jobs():
+@shared_task(bind=True)
+def execute_all_jobs(self):
+
+    progress_recorder = ProgressRecorder(self)
 
     def run_standalone_spider(file_name):
         command = 'python ' + logics_dir + f'{file_name}.py'
         os.system(command)
 
-    def run_all_spiders():
-        spider_files = [
-            'listing_urls_spider',
-            'listing_words_spider',
-        ]
+    spider_files = [
+        'listing_urls_spider',
+        'listing_words_spider',
+    ]
 
-        for file in spider_files:
-            run_standalone_spider(file)
+    messages_dict = {
+        "0": "URLs has been collected... ⇢ ...Now off to scanning words/web-page",
+        "1": "All words has been scanned... ⇢ ...Preparing data to be presented"
+    }
 
-    run_all_spiders()
+    for i in range(1, 50):
+        time.sleep(0.1)
+        progress_recorder.set_progress(
+            i,
+            (50*2),
+            "Initializing..." if i < 11 else "Collecting the required URLs")
+
+    for i, file in enumerate(spider_files):
+        run_standalone_spider(file)
+        progress_recorder.set_progress(i+51, 65, messages_dict[f'{i}'])
+
+    # pickle.dump(self, file=open('shared_task_self_obj.pkl', 'wb'))
+    # command = 'python ' + logics_dir + 'listing_words_spider.py'
+    # os.system(command)
 
     input_file = "words_grouped_data.json"
 

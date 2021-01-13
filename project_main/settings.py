@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app_scraper.apps.AppScraperConfig',
+    'django_celery_results',
+    'celery_progress'
 ]
 
 MIDDLEWARE = [
@@ -125,5 +127,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+CELERY_BROKER_URL = 'redis://:pf0914ac31ae5ae729ef99ba49648746889839e22d4a90112a5fbd40a628de023@ec2-18-211-236-135.compute-1.amazonaws.com:23109'
+
+CELERY_ACCEPT_CONTENT = ['json']
+
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_RESULT_BACKEND = 'django-db'
