@@ -131,7 +131,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-CELERY_BROKER_URL = 'redis://:pf0914ac31ae5ae729ef99ba49648746889839e22d4a90112a5fbd40a628de023@ec2-18-211-236-135.compute-1.amazonaws.com:23109'
+CELERY_BROKER_URL = os.environ.get('REDIS_URL')
 
 CELERY_ACCEPT_CONTENT = ['json']
 
