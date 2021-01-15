@@ -45,16 +45,16 @@ def execute_all_jobs(self):
         "1": "All words has been scanned... ⇢ ...Preparing data to be presented"
     }
 
-    for i in range(1, 50):
+    for i in range(1, 3):
         time.sleep(0.1)
         progress_recorder.set_progress(
             i,
-            (50*2),
-            "Initializing..." if i < 11 else "Collecting the required URLs")
+            (3*2),
+            "Initializing..." if i < 1 else "Collecting the required URLs")
 
     for i, file in enumerate(spider_files):
         run_standalone_spider(file)
-        progress_recorder.set_progress(i+51, 65, messages_dict[f'{i}'])
+        progress_recorder.set_progress(i+4, 6, messages_dict[f'{i}'])
 
     # pickle.dump(self, file=open('shared_task_self_obj.pkl', 'wb'))
     # command = 'python ' + logics_dir + 'listing_words_spider.py'
