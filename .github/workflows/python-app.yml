@@ -34,7 +34,8 @@ jobs:
         pylint . --exit-zero --disable=C,F *.py
     - name: Run unit-tests
       env:
-        SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD}}
       run: |
         python ./manage.py makemigrations
         python ./manage.py migrate
