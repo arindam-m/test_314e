@@ -20,6 +20,10 @@ See deployment for notes on how to deploy the project on a live system.
 
 [Python 3.7.x](https://www.python.org/downloads/) (or any of the latest stable) is required.
 
+*Note: As we are using Celery Task Scheduler, it's not officially supported on Windows*
+
+<br/>
+
 After cloning and moving into the directory, set up the vitural environment
 
 ```bash
@@ -27,7 +31,7 @@ $ git clone https://github.com/arindam-m/test_314e.git
 $ cd test_314e/
 
 $ python -m venv _env
-$ source _env/bin/activate # _evn/Scripts/activate on Windows
+$ source _env/bin/activate
 
 ```
 
@@ -40,19 +44,28 @@ $ python -m pip install --upgrade pip
 $ pip install -r requirements.txt
 $ pip list
 ```
-We need to set the SECRET_KEY of our Django project and AWS S3 bucket respectively, in our local OS as a environment variable.
+We need to set the SECRET_KEY of our Django project, AWS S3 credentials, and a few others in our local OS as a environment variable.
 
 ```python
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 ACCESS_KEY = os.environ.get('S3_ACCESS_KEY_ID')
 SECRET_ACCESS_KEY = os.environ.get('S3_SECRET_ACCESS_KEY')
+
+CELERY_BROKER_URL = os.environ.get('REDIS_URL')
+
+MAIN_DATABASE_PASSWORD = os.environ.get('POSTGRESQL_PASSWORD')
 ```
 
-Finally, we start the Django server
-
+Finally, we start two processes at two seperate shells/terminals.
+1. The Django Server
 ```bash
 $ python manage.py runserver
+```
+2. The Celery Worker
+
+```bash
+$ celery -A project_main worker -l INFO
 ```
 
 When the developement server is successfully booted up, you get to see that it's being hosted on a localhost @ port: 8000
@@ -103,3 +116,6 @@ And then repeat the above process to start the Django server.
 * [Django](https://www.djangoproject.com/) - Full stack web-framework
 * [Scrappy](https://scrapy.org/) - A web-framework for extracting data
 * [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/) - A parser for web scrapping
+* [Celery](https://docs.celeryproject.org/en/stable/) - A distributed/asynchronous task scheduler for background worker
+* [RedisMQ]() - A message queues/broker
+* [PostgreSQL DB]() - A database to store the backend results
